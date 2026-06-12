@@ -1,25 +1,25 @@
 class Logbrew < Formula
   desc "Public command-line interface for LogBrew."
   homepage "https://logbrew.co"
-  version "0.1.5"
+  version "0.1.6"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.5/logbrew-cli-aarch64-apple-darwin.tar.xz"
-      sha256 "3d0f1266ec824d6f58cdf100df7a173fb3d3a3edaf473f48b3d30e4b93b69942"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.6/logbrew-cli-aarch64-apple-darwin.tar.xz"
+      sha256 "0d3a2381b97c7950aafadb116a02dd4ddfec1d81381269da04256f36a6aee5ba"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.5/logbrew-cli-x86_64-apple-darwin.tar.xz"
-      sha256 "349feb12277e5cd5ac37d78eed077f4eb1ed070beeafb047f1fafcc75f3759ee"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.6/logbrew-cli-x86_64-apple-darwin.tar.xz"
+      sha256 "92b4bead5e8032111bb6b805eb2cd5da94bd4308a8007dc25d9182e64b80a05d"
     end
   end
   if OS.linux?
     if Hardware::CPU.arm?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.5/logbrew-cli-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "58a364fa1c98d7fec328668e98e35d3c8f5205e42a20e9837ee00e8c416e9a5e"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.6/logbrew-cli-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "3019162a4010a1a73f640863b70c9481dea5bff82ac59239dd127eb9cc86fc79"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.5/logbrew-cli-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "d929b6fa825fb054538500d37165485342b48ec52346f8410024f6a95b3966a4"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.6/logbrew-cli-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "ba4b920b958e9e459aa0c4289d176d1443c76cee5347965cab77086470f39b93"
     end
   end
   license "MIT"
