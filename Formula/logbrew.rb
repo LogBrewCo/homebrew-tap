@@ -1,7 +1,6 @@
 class Logbrew < Formula
-  desc "Public command-line interface for LogBrew."
+  desc "Developer-first observability command-line interface"
   homepage "https://logbrew.co"
-  version "0.1.27"
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/LogBrewCo/cli/releases/download/v0.1.27/logbrew-cli-aarch64-apple-darwin.tar.xz"
@@ -25,12 +24,12 @@ class Logbrew < Formula
   license "MIT"
 
   BINARY_ALIASES = {
-    "aarch64-apple-darwin": {},
+    "aarch64-apple-darwin":      {},
     "aarch64-unknown-linux-gnu": {},
-    "x86_64-apple-darwin": {},
-    "x86_64-pc-windows-gnu": {},
-    "x86_64-unknown-linux-gnu": {}
-  }
+    "x86_64-apple-darwin":       {},
+    "x86_64-pc-windows-gnu":     {},
+    "x86_64-unknown-linux-gnu":  {},
+  }.freeze
 
   def target_triple
     cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
@@ -48,18 +47,10 @@ class Logbrew < Formula
   end
 
   def install
-    if OS.mac? && Hardware::CPU.arm?
-      bin.install "logbrew"
-    end
-    if OS.mac? && Hardware::CPU.intel?
-      bin.install "logbrew"
-    end
-    if OS.linux? && Hardware::CPU.arm?
-      bin.install "logbrew"
-    end
-    if OS.linux? && Hardware::CPU.intel?
-      bin.install "logbrew"
-    end
+    bin.install "logbrew" if OS.mac? && Hardware::CPU.arm?
+    bin.install "logbrew" if OS.mac? && Hardware::CPU.intel?
+    bin.install "logbrew" if OS.linux? && Hardware::CPU.arm?
+    bin.install "logbrew" if OS.linux? && Hardware::CPU.intel?
 
     install_binary_aliases!
 
@@ -70,5 +61,9 @@ class Logbrew < Formula
     # Install any leftover files in pkgshare; these are probably config or
     # sample files.
     pkgshare.install(*leftover_contents) unless leftover_contents.empty?
+  end
+
+  test do
+    assert_match version.to_s, shell_output("#{bin}/logbrew version")
   end
 end
