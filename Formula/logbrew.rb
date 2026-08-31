@@ -3,22 +3,22 @@ class Logbrew < Formula
   homepage "https://logbrew.co"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.71/logbrew-cli-aarch64-apple-darwin.tar.xz"
-      sha256 "df659649bc21a2dbf6289eb4ec8137a81353888601a0fd8a18609df3546a2ca5"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.72/logbrew-cli-aarch64-apple-darwin.tar.xz"
+      sha256 "55590762316455411e7a2ae9afa031ba48f5ebf25d71a17dc783fb26748a39c1"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.71/logbrew-cli-x86_64-apple-darwin.tar.xz"
-      sha256 "9b8700b15555e3850b51ee3cae92714e365d1d946a0f816174d9c5d4b5267bb4"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.72/logbrew-cli-x86_64-apple-darwin.tar.xz"
+      sha256 "95622a4c63411e8d9056fc3c6bf7c226dfdabc788008bbd5afc0e222b5e81400"
     end
   end
   if OS.linux?
     if Hardware::CPU.arm?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.71/logbrew-cli-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "beddaca5289d6c34f4d7eedb139275b81e78b18da28f2b7388c50d70175f9a5d"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.72/logbrew-cli-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "99eb1a9a7be23a404fcfdd750276fddc61f41bdd38d9bc9c4e4964d8a33a3ff4"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.71/logbrew-cli-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "c96fc5ece5bd8d1378e4cce56aba66312a3914b218330b6155680b46cbb7c0c5"
+      url "https://github.com/LogBrewCo/cli/releases/download/v0.1.72/logbrew-cli-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "58b454839b1bc0966597e7197e99f9606d032291b933a4b95334f81e792826a2"
     end
   end
   license "MIT"
