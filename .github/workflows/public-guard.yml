@@ -15,9 +15,11 @@ on:
 
 permissions: {}
 
+# Pull request runs replace older runs for the same pull request. Pushes
+# queue per branch so each pushed range gets its own scan.
 concurrency:
-  group: public-guard-${{ github.event_name }}-${{ github.event.pull_request.number || github.sha }}
-  cancel-in-progress: true
+  group: public-guard-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
   test:
