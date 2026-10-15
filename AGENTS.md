@@ -55,3 +55,20 @@ Never add credentials, private paths or hosts, customer or account data,
 internal architecture or operations, private plans, research, task state,
 agent prompts, or non-public release evidence. Use product-facing commit and
 pull-request text without agent attribution unless the user requests it.
+
+Commits, pull-request titles and bodies, branch names, READMEs, and release
+notes describe user-visible behavior only. Do not name hosting, network,
+storage, or deployment internals, non-public repositories, local paths,
+plans, agent sessions, costs, or real user data. Do not add AI attribution.
+
+`scripts/public-guard.sh` enforces this. The required `Public guard` status
+scans every new commit, commit message, changed path, branch name, and
+pull-request title and body. Run `bash scripts/public-guard.sh install` once
+per checkout to scan commit messages and pushes locally. Never use
+`--no-verify`. If a finding is a false positive, change the rule in its own
+pull request first; never split, encode, or reword text only to pass the
+guard.
+
+Formula updates from the CLI release arrive on a `formula/<version>` branch.
+The `Promote formula update` job scans the branch, reports the status, and
+fast-forwards `main`.
