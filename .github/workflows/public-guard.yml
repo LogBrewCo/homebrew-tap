@@ -1,0 +1,95 @@
+name: Public guard
+
+# The scan job uses pull_request_target so fork pull requests get the full
+# project term list. It runs only the base branch copy of the guard and reads
+# the pull request as Git objects; it never checks out or runs its content.
+# The test job runs the pull request copy of the guard without the term list.
+on:
+  pull_request:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches:
+      - main
+      - "formula/**"
+
+permissions: {}
+
+concurrency:
+  group: public-guard-${{ github.event_name }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Public guard tests
+    if: github.event_name != 'pull_request_target' && !startsWith(github.ref, 'refs/heads/formula/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Test the guard
+        run: bash scripts/test-public-guard.sh
+
+  scan:
+    name: Public guard scan
+    if: github.event_name != 'pull_request' && !startsWith(github.ref, 'refs/heads/formula/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Checkout the base branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan new commits and pull request text
+        env:
+          PUBLIC_GUARD_TERMS: ${{ secrets.PUBLIC_GUARD_TERMS }}
+          PUBLIC_GUARD_REQUIRE_TERMS: "1"
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/public-guard.sh github
+
+  # The release workflow pushes each formula update to formula/<version>.
+  # Main requires the "Public guard" status, so this job scans the update,
+  # reports the status, and fast-forwards main. It runs the guard from main.
+  promote:
+    name: Promote formula update
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/formula/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      statuses: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Scan, report, and fast-forward main
+        env:
+          PUBLIC_GUARD_TERMS: ${{ secrets.PUBLIC_GUARD_TERMS }}
+          PUBLIC_GUARD_REQUIRE_TERMS: "1"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch --quiet --no-tags origin "+$GITHUB_REF:refs/public-guard/head"
+          [[ "$(git rev-parse refs/public-guard/head)" == "$GITHUB_SHA" ]]
+          git merge-base --is-ancestor origin/main "$GITHUB_SHA"
+          [[ "$(git diff --name-only origin/main "$GITHUB_SHA")" =~ ^(Formula/logbrew\.rb)?$ ]]
+          printf '%s' "${GITHUB_REF#refs/heads/}" >"$RUNNER_TEMP/branch-name"
+          bash scripts/public-guard.sh range origin/main "$GITHUB_SHA" branch-name="$RUNNER_TEMP/branch-name"
+          gh api --silent -X POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state=success \
+            -f context="Public guard" -f description="No non-public content found" \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          git push origin "$GITHUB_SHA:refs/heads/main" ":${GITHUB_REF}"
