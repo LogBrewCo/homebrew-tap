@@ -7,7 +7,8 @@
 # Every run starts from an empty runner. p99 needs 100 runs; below that an entry
 # gives the run count and the maximum.
 # Format: one `key = value` per line, arrays on one line, pins as "file::text"
-# where @VERSION@ stands for the entry's version.
+# where @VERSION@ stands for the entry's version. `uses` lists actions by name; the
+# workflows hold each pin (a full commit and a version comment).
 #
 # Open gap: Formula/logbrew.rb is not linted. `brew style` and `brew audit` are the
 # official Homebrew checkers; adding them needs a macOS or Linux Homebrew runner.
@@ -35,9 +36,9 @@ checked = 2026-10-19
 id = "actions-checkout"
 risk = "CI source checkout supply chain"
 tool = "actions/checkout"
-version = "7.0.1"
-unpinned = "pinned by commit in every workflow (see uses)"
-uses = ["actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1"]
+version = "pinned in the workflows"
+unpinned = "each workflow pins the commit with a version comment; the check requires one such pin per action"
+uses = ["actions/checkout"]
 runs_in = "every workflow"
 config = "persist-credentials: false where the job needs no push"
 conflicts = "none known"
