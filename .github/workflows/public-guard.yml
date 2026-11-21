@@ -72,11 +72,14 @@ jobs:
       contents: write
       statuses: write
     steps:
+      # The job pushes main, so it keeps the checkout credential. It uploads
+      # no artifacts.
       - name: Checkout main
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Scan, report, and fast-forward main
         env:
