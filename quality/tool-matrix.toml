@@ -28,9 +28,9 @@ config = "scripts/public-guard.toml"
 conflicts = "none known"
 exceptions = "false positives are fixed in their own pull request"
 runtime = "scan n=4, max 5 s; formula promotion n=6, max 6 s; self-test n=4, max 29 s; p99 unsupported"
-findings = "unknown: findings are fixed before merge"
+findings = "unknown: findings are fixed before merge; 2026-11-21: gitleaks 8.30.1 is the latest release, no advisories"
 replaces = "none"
-checked = 2026-10-19
+checked = 2026-11-21
 
 [[tool]]
 id = "actions-checkout"
@@ -44,9 +44,9 @@ config = "persist-credentials: false where the job needs no push"
 conflicts = "none known"
 exceptions = "none"
 runtime = "at most 3 s per run"
-findings = "not a check; supply-chain pin"
+findings = "not a check; supply-chain pin; 2026-11-21: v7.0.1 is the latest release, no advisories"
 replaces = "none"
-checked = 2026-10-19
+checked = 2026-11-21
 
 [[tool]]
 id = "tool-matrix"
@@ -62,7 +62,7 @@ exceptions = "none"
 runtime = "new; record from CI runs at the next check"
 findings = "seeded: an unlisted command, a changed pin, a changed action commit, a stale or future date, and a missing field each fail"
 replaces = "none"
-checked = 2026-10-19
+checked = 2026-11-21
 
 [[tool]]
 id = "openssf-scorecard"
